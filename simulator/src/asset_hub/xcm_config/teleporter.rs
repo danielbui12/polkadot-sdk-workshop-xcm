@@ -31,5 +31,5 @@ mod sandbox {
 	}
 
 	// We want to trust siblings as teleporters of their own native token.
-	pub type TrustedTeleporters = todo!();
+	pub type TrustedTeleporters = ();
 }
