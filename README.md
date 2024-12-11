@@ -1,15 +1,19 @@
 # polkadot-sdk-workshop-xcm
 
-This project is a workshop for learning about Polkadot SDK's XCM.
+This project is a workshop for learning about Polkadot SDK's XCM. 
+
+If you would like to learn more, [read this](https://www.shawntabrizi.com/xcm-workshop/#/)
 
 ## Get Started
 
 To start the workshop:
 
 ```sh
-git clone -b steps https://github.com/shawntabrizi/polkadot-sdk-workshop-xcm.git
+git clone -b gitorial https://github.com/shawntabrizi/polkadot-sdk-workshop-xcm.git
 cd polkadot-sdk-workshop-xcm
-git checkout 84a219252a04963cba740a1f9805931639c29736
+# Remove all commits ahead
+git reset --hard e3cf0e7767b979a53c8a404f37719c778987116e
+git push origin +gitorial
 ```
 
 ## Overview
