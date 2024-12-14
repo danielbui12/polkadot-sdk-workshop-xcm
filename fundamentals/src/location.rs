@@ -46,8 +46,8 @@ pub mod relative_to_polkadot_relay {
         // A 32 byte account on para 1000 with all bytes equal to 1 (Alice).
         pub AliceBytes: [u8; 32] = ALICE.into();
         pub PolkadotPara1000Alice: Location = Location::new(0, [Parachain(1000), AliceBytes::get().into()]);
-        // The location of the `Balances` pallet on the relay chain.
-		pub PolkadotPara1000AssetsPallet: Location = (PalletInstance(50)).into();
+        // The location of the `Assets` pallet on the relay chain.
+		pub PolkadotPara1000AssetsPallet: Location = [Parachain(1000), PalletInstance(50)].into();
         // The asset with index `1984` of the Assets pallet on polkadot parachain with id 1000.
         pub PolkadotPara1000Asset1984: Location = [Parachain(1000), PalletInstance(50), GeneralIndex(1984)].into();
         // The Kusama parachain with id 1000.
@@ -69,7 +69,7 @@ pub mod relative_to_polkadot_para_1000 {
         // A 32 byte account on para 1000.
         pub AliceBytes: [u8; 32] = ALICE.into();
         pub PolkadotPara1000Alice: Location =  Location::new(0, [AliceBytes::get().into()]);
-        // The location of the `Balances` pallet on the relay chain.
+        // The location of the `Assets` pallet on the relay chain.
 		pub PolkadotPara1000AssetsPallet: Location = (PalletInstance(50)).into();
         // The asset with index `1984` of the Assets pallet on the Polkadot parachain with id 1000.
         pub PolkadotPara1000Asset1984: Location = [PalletInstance(50), GeneralIndex(1984)].into();
@@ -169,22 +169,20 @@ pub mod absolute {
 
     parameter_types! {
         // The Polkadot parachain with id 1000.
-        pub PolkadotPara1000: Location = todo!();
+        pub PolkadotPara1000: Location = (GlobalConsensus(Polkadot), Parachain(1000)).into();
         // The Polkadot parachain with id 2004.
-        pub PolkadotPara2004: Location = todo!();
+        pub PolkadotPara2004: Location = (GlobalConsensus(Polkadot), Parachain(2004)).into();
         // The Polkadot relay chain.
-        pub PolkadotRelay: Location = todo!();
+        pub PolkadotRelay: Location = GlobalConsensus(Polkadot).into();
         // A 32 byte account on para 1000.
         pub AliceBytes: [u8; 32] = ALICE.into();
-        pub PolkadotPara1000Alice: Location = todo!();
+        pub PolkadotPara1000Alice: Location = Location::new(0, [GlobalConsensus(Polkadot), Parachain(1000), AliceBytes::get().into()]);
         // The location of the `Asset` pallet on the relay chain.
-		pub PolkadotPara1000AssetsPallet: Location = todo!();
-        // The location of the `Balances` pallet on the relay chain.
-        pub PolkadotRelayBalancesPallet: Location = todo!();
+		pub PolkadotPara1000AssetsPallet: Location = [GlobalConsensus(Polkadot), Parachain(1000), PalletInstance(50)].into();
         // The asset with index `1984` of the Assets pallet on the Polkadot parachain with id 1000.
-        pub PolkadotPara1000Asset1984: Location = todo!();
+        pub PolkadotPara1000Asset1984: Location = [GlobalConsensus(Polkadot), Parachain(1000), PalletInstance(50), GeneralIndex(1984)].into();
         // The Kusama parachain with id 1000.
-        pub KusamaPara1000: Location = todo!();
+        pub KusamaPara1000: Location = (GlobalConsensus(Kusama), Parachain(1000)).into();
     }
 }
 
@@ -194,17 +192,23 @@ pub mod manipulation {
 
     // Extract the account id from a Location, if it is the last junction in the Location.
     pub fn extract_last_account_id(location: Location) -> Option<AccountId32> {
-        todo!("{:?}", location)
+        match location.last() {
+            Some(Junction::AccountId32 { id, .. }) => Some((*id).into()),
+            _ => None,
+        }
     }
 
     // From the perspective of a parachain, check if another location is a sibling parachain, and
     // return the id.
     pub fn check_sibling_parachains(maybe_sibling: Location) -> Option<u32> {
-        todo!("{:?}", maybe_sibling)
+        match maybe_sibling.unpack() {
+            (1, [Parachain(id)]) => Some(*id),
+            _ => None,
+        }
     }
 
     // Append `who` to the current `origin`.
     pub fn descend_origin(origin: &mut Location, who: Location) -> Result<(), XcmError> {
-        todo!("{:?} {:?}", origin, who)
+        (*origin).append_with(who).map_err(|_| XcmError::LocationFull)
     }
 }
