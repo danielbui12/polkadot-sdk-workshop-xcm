@@ -41,7 +41,7 @@ fn reserve_asset_transfer_works() {
 		// We can specify `u128` or nothing here for the conversion to work properly.
 		// If we specify `u64`, the conversion will turn into a non-fungible token
 		// instead of a fungible one.
-		let assets: Assets = (Here, 50u128 * CENTS).into();
+		let assets: Assets = (Here, 50 * CENTS).into();
 		assert_ok!(relay_chain::XcmPallet::transfer_assets(
 			relay_chain::RuntimeOrigin::signed(ALICE),
 			Box::new(VersionedLocation::V4(destination.clone())),

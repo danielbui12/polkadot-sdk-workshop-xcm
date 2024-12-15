@@ -17,11 +17,11 @@ mod sandbox {
 	// TODO: Finish type.
 	pub type FungibleTransactor = FungibleAdapter<
 		// What implementation of the `fungible::*` traits do we want to use?.
-		(),
+		Balances,
 		// What tokens should be handled by this transactor?
-		(),
+		IsConcrete<KsmLocation>,
 		// How do we convert an XCM Location into a local account id?
-		(),
+		LocationConverter,
 		// The type for account ids, only needed because `fungible` is generic over it.
 		AccountId,
 		// Not tracking teleports.
