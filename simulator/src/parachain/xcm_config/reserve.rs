@@ -14,10 +14,10 @@ mod sandbox {
 }
 
 #[cfg(any(
-	feature = "other-parachain-tokens",
-	feature = "register-assets",
-	feature = "asset-hub",
-	feature = "barrier"
+    feature = "other-parachain-tokens",
+    feature = "register-assets",
+    feature = "asset-hub",
+    feature = "barrier"
 ))]
 mod sandbox {
 	use core::marker::PhantomData;
@@ -28,8 +28,9 @@ mod sandbox {
 
 	pub struct ReserveAssetsFrom<T>(PhantomData<T>);
 	impl<T: Get<Location>> ContainsPair<Asset, Location> for ReserveAssetsFrom<T> {
-		fn contains(_asset: &Asset, _origin: &Location) -> bool {
-			todo!()
+		fn contains(_asset: &Asset, origin: &Location) -> bool {
+			let prefix = T::get();
+			&prefix == origin
 		}
 	}
 
@@ -38,6 +39,5 @@ mod sandbox {
 	}
 
 	/// We trust other chains as reserves of their own asset AND assets from asset hub.
-	// TODO: Finish type.
-	pub type TrustedReserves = NativeAsset;
+	pub type TrustedReserves = (NativeAsset, ReserveAssetsFrom<AssetHubLocation>);
 }

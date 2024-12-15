@@ -18,7 +18,8 @@ mod sandbox {
 		for IsForeignConcreteAsset<IsForeign>
 	{
 		fn contains(asset: &Asset, origin: &Location) -> bool {
-			todo!()
+			log::trace!(target: "xcm::contains", "IsForeignConcreteAsset asset: {:?}, origin: {:?}", asset, origin);
+			matches!(asset.id, AssetId(ref id) if IsForeign::contains(id, origin))
 		}
 	}
 
@@ -28,7 +29,17 @@ mod sandbox {
 		for FromSiblingParachain<SelfParaId>
 	{
 		fn contains(a: &Location, b: &Location) -> bool {
-			todo!()
+            // `a` needs to be from `b` at least.
+            if !a.starts_with(&b) {
+                return false;
+            }
+
+            // here we check if sibling
+            match a.unpack() {
+                (1, interior) =>
+                    matches!(interior.first(), Some(Parachain(sibling_para_id)) if sibling_para_id.ne(&u32::from(SelfParaId::get()))),
+                _ => false,
+            }
 		}
 	}
 

@@ -12,11 +12,11 @@ mod sandbox {
 
 	parameter_types! {
 		// Filter for our native token.
-		pub NativeToken: AssetFilter = todo!();
+		pub NativeToken: AssetFilter = Wild(AllOf { fun: WildFungible, id: AssetId(Here.into()) });
 		// Location for asset hub.
-		pub AssetHubLocation: Location = todo!();
+		pub AssetHubLocation: Location = Location::new(1, [Parachain(1000)]);
 		// A filter, and a location we trust as teleporter for that filter.
-		pub AssetHubTrustedTeleporter: (AssetFilter, Location) = todo!();
+		pub AssetHubTrustedTeleporter: (AssetFilter, Location) = (NativeToken::get(), AssetHubLocation::get());
 	}
 
 	pub type TrustedTeleporters = xcm_builder::Case<AssetHubTrustedTeleporter>;
