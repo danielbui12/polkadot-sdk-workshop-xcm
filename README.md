@@ -16,6 +16,12 @@ git reset --hard e3cf0e7767b979a53c8a404f37719c778987116e
 git push origin +gitorial
 ```
 
+After finish the _fundamentals_ challenge at `gitorial` branch, switch to `simulator-starting-point` to take the _simulator_ challenge.
+
+```sh
+git checkout simulator-starting-point
+```
+
 ## Overview
 
 This workshop aims to teach students about XCM following the philosophy of "discovery through experience".
