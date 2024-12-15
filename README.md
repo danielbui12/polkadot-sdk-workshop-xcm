@@ -20,6 +20,9 @@ After finish the _fundamentals_ challenge at `gitorial` branch, switch to `simul
 
 ```sh
 git checkout simulator-starting-point
+# Remove all commits ahead
+git reset --hard 950e012d1acf2cc0fdc65c35f05ebb5d7b02b367
+git push origin +simulator-starting-point
 ```
 
 ## Overview
