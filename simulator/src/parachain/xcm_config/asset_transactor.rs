@@ -46,7 +46,8 @@ mod sandbox {
 		FungibleAdapter, FungiblesAdapter, IsConcrete, MatchedConvertedConcreteId, MintLocation,
 		NoChecking, StartsWith,
 	};
-	use xcm_executor::traits::JustTry;
+	// use xcm_executor::traits::JustTry;
+	use xcm_executor::traits::Identity;
 
 	use crate::parachain::{
 		location_converter::LocationConverter, AccountId, Balance, Balances, ForeignAssets,
@@ -63,11 +64,11 @@ mod sandbox {
 	// TODO: Finish type.
 	pub type FungibleTransactor = FungibleAdapter<
 		// What implementation of the `fungible::*` traits do we want to use?
-		(),
+		Balances,
 		// What tokens should be handled by this transactor?
-		(),
+		IsConcrete<LocalPrefix>,
 		// How do we convert an XCM Location into a local account id?
-		(),
+		LocationConverter,
 		// The type for account ids, only needed because `fungible` is generic over it.
 		AccountId,
 		// Tracking teleports.
@@ -79,29 +80,29 @@ mod sandbox {
 	/// inside our local chain.
 	// TODO: Finish type.
 	pub type ForeignAssetsMatcher = MatchedConvertedConcreteId<
-		(), // Asset id.
-		(), // Balance type.
-		(), // Location matcher.
-		(), // How to convert from Location to AssetId.
-		(), // How to convert from u128 to Balance.
+		Location, // Asset id.
+		Balance, // Balance type.
+		EverythingBut<StartsWith<LocalPrefix>>, // Location matcher.
+		Identity, // JustTry, // How to convert from Location to AssetId.
+		Identity, // JustTry, // How to convert from u128 to Balance.
 	>;
 
 	/// AssetTransactor for handling other parachains' native tokens.
 	// TODO: Finish type.
 	pub type ForeignFungiblesTransactor = FungiblesAdapter<
 		// What implementation of the `fungible::*` traits do we want to use?
-		(),
+		ForeignAssets,
 		// What tokens should be handled by this transactor?
-		(),
+		ForeignAssetsMatcher,
 		// How we convert from a Location to an account id.
-		(),
+		LocationConverter,
 		// The `AccountId` type.
 		AccountId,
 		// Not tracking teleports since we only use reserve asset transfers for these types
 		// of assets.
-		(),
+		NoChecking,
 		// The account for checking.
-		(),
+		CheckingAccount,
 	>;
 
 	pub type AssetTransactor = (FungibleTransactor, ForeignFungiblesTransactor);

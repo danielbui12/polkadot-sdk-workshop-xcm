@@ -39,5 +39,5 @@ mod sandbox {
 
 	/// We trust other chains as reserves of their own asset AND assets from asset hub.
 	// TODO: Finish type.
-	pub type TrustedReserves = ();
+	pub type TrustedReserves = NativeAsset;
 }
