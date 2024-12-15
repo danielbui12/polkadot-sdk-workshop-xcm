@@ -27,12 +27,13 @@ fn reserve_asset_transfer_works() {
 
 	ParaC::execute_with(|| {
 		// Parachain C registers its native token on Parachain A.
+		let our_location_pov_para_a: Location = (Parent, Parachain(3)).into();
 		let destination: Location = (Parent, Parachain(1)).into();
 		let call = parachain::RuntimeCall::ForeignAssets(pallet_assets::Call::<
 			parachain::Runtime,
 			pallet_assets::Instance2,
 		>::create {
-			id: (Parent, Parachain(3)).into(),
+			id: our_location_pov_para_a,
 			admin: parachain::LocationConverter::convert_location(&destination).unwrap(),
 			min_balance: 1,
 		});
